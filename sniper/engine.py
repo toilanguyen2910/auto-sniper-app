@@ -587,7 +587,10 @@ class SniperEngine:
         except Exception as e:
             logger.exception("Unhandled error in task lifecycle for %s: %s", task.id, e)
             await self._set_status(task.id, TaskStatus.FAILED)
-            await self._emit_log(task.id, "ERROR", f"Task encountered fatal error: {e}")
+            err_msg = str(e)
+            if "ERR_CONNECTION_REFUSED" in err_msg and ("127.0.0.1" in task.target_url or "localhost" in task.target_url):
+                err_msg += " (Gợi ý: Máy chủ cục bộ 127.0.0.1 chưa được bật. Chạy 'python start_mock_portal.py' nếu bạn muốn test thử nghiệm, hoặc đổi Target URL sang trang web thực tế)."
+            await self._emit_log(task.id, "ERROR", f"Task encountered fatal error: {err_msg}")
         finally:
             # 6. Teardown context and page
             await self._browser_manager.close_context(task.id)
