@@ -106,7 +106,10 @@ async def test_end_to_end_sniper_integration_against_mock_portal(mock_server_por
         )
 
         # 4. Wait for task to enter POLLING state and poll while full
-        await asyncio.sleep(1.2)
+        for _ in range(40):
+            if engine.get_task_status(task.id) == TaskStatus.POLLING:
+                break
+            await asyncio.sleep(0.15)
         current_status = engine.get_task_status(task.id)
         assert current_status == TaskStatus.POLLING
         assert TaskStatus.POLLING in status_transitions

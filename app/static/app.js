@@ -613,15 +613,26 @@ function renderTasksGrid() {
         const statusBadgeClass = getStatusBadgeClass(task.status);
         const statusIcon = getStatusIcon(task.status);
 
+        const STATUS_MAP_VI = {
+            'PENDING': 'Chờ chạy',
+            'POLLING': 'Đang quét',
+            'WAITING_LOGIN': 'Chờ đăng nhập / Captcha',
+            'SNIPING': 'Đang giật slot',
+            'SUCCESS': 'Thành công 🎉',
+            'FAILED': 'Thất bại',
+            'STOPPED': 'Đã dừng'
+        };
+        const statusTextVi = STATUS_MAP_VI[task.status] || task.status;
+
         // Credentials display
         const username = task.credentials?.username;
         const credsText = username 
             ? `👤 ${escapeHtml(username)} <span class="text-slate-500 text-[11px]">(••••••••)</span>` 
-            : '<span class="text-slate-500">🔓 No Auth Required</span>';
+            : '<span class="text-slate-500">🔓 Không yêu cầu tài khoản</span>';
 
         // Selectors summary
-        const slotSelector = task.selectors?.slot_selector || 'None';
-        const slotKeyword = task.selectors?.slot_keyword || '';
+        const slotSelector = task.selectors?.slot_selector || 'Mặc định';
+        const targetCourses = task.selectors?.target_course_codes || '';
 
         card.innerHTML = `
             <div class="absolute -right-12 -top-12 w-28 h-28 rounded-full ${accentGlow} blur-2xl pointer-events-none"></div>
@@ -634,7 +645,7 @@ function renderTasksGrid() {
                     </h3>
                     <span class="px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider shrink-0 flex items-center space-x-1 ${statusBadgeClass}">
                         <span>${statusIcon}</span>
-                        <span>${task.status}</span>
+                        <span>${statusTextVi}</span>
                     </span>
                 </div>
 
@@ -643,7 +654,7 @@ function renderTasksGrid() {
                     <span class="truncate font-mono bg-slate-950 px-2 py-1 rounded border border-slate-800 flex-1 select-all" title="${escapeHtml(task.target_url)}">
                         ${escapeHtml(task.target_url)}
                     </span>
-                    <button class="btn-copy-url p-1 hover:text-white rounded hover:bg-slate-800 transition text-slate-400" title="Copy Target URL" data-url="${escapeHtml(task.target_url)}">
+                    <button class="btn-copy-url p-1 hover:text-white rounded hover:bg-slate-800 transition text-slate-400" title="Sao chép đường link" data-url="${escapeHtml(task.target_url)}">
                         📋
                     </button>
                 </div>
@@ -652,13 +663,13 @@ function renderTasksGrid() {
             <!-- Card Metadata Badges -->
             <div class="grid grid-cols-2 gap-2 text-xs mb-4">
                 <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80">
-                    <span class="text-[10px] text-slate-500 block uppercase font-semibold">Polling Rate</span>
+                    <span class="text-[10px] text-slate-500 block uppercase font-semibold">Tần số quét</span>
                     <span class="font-mono text-slate-200 font-medium">⏱ ${task.polling_interval}s</span>
                 </div>
                 <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80">
-                    <span class="text-[10px] text-slate-500 block uppercase font-semibold">Browser Mode</span>
+                    <span class="text-[10px] text-slate-500 block uppercase font-semibold">Trình duyệt</span>
                     <span class="font-medium ${task.headless ? 'text-slate-300' : 'text-amber-400'}">
-                        ${task.headless ? '🖥 Headless' : '👁 Visible'}
+                        ${task.headless ? '🖥 Ẩn ngầm' : '👁 Hiện cửa sổ'}
                     </span>
                 </div>
             </div>
@@ -666,17 +677,24 @@ function renderTasksGrid() {
             <!-- Credentials & Selector Info -->
             <div class="space-y-1.5 text-xs text-slate-400 bg-slate-950/40 p-3 rounded-xl border border-slate-800/60 mb-5 font-mono">
                 <div class="flex items-center justify-between">
-                    <span class="text-[10px] text-slate-500 uppercase font-semibold">Credentials:</span>
+                    <span class="text-[10px] text-slate-500 uppercase font-semibold">Tài khoản:</span>
                     <div class="truncate max-w-[170px]">${credsText}</div>
                 </div>
+                ${targetCourses ? `
+                <div class="flex items-center justify-between text-emerald-400 bg-emerald-950/30 px-2 py-1 rounded border border-emerald-500/30">
+                    <span class="text-[10px] uppercase font-bold">🎯 Môn cần săn:</span>
+                    <span class="font-bold truncate max-w-[150px]" title="${escapeHtml(targetCourses)}">${escapeHtml(targetCourses)}</span>
+                </div>
+                ` : `
                 <div class="flex items-center justify-between">
-                    <span class="text-[10px] text-slate-500 uppercase font-semibold">Trigger Slot:</span>
+                    <span class="text-[10px] text-slate-500 uppercase font-semibold">Nút kích hoạt:</span>
                     <span class="text-slate-300 truncate max-w-[170px]" title="${escapeHtml(slotSelector)}">${escapeHtml(slotSelector)}</span>
                 </div>
+                `}
                 ${task.enable_dual_trigger ? `
                 <div class="flex items-center justify-between text-emerald-400 pt-1 border-t border-slate-800/60">
                     <span class="text-[10px] uppercase font-semibold">Dual-Trigger:</span>
-                    <span class="text-[11px] font-bold">⚡ Active (API+UI)</span>
+                    <span class="text-[11px] font-bold">⚡ Bật (API + UI)</span>
                 </div>` : ''}
             </div>
 
@@ -686,7 +704,7 @@ function renderTasksGrid() {
                 <!-- Confirm Login Action for WAITING_LOGIN -->
                 <button type="button" class="btn-confirm-login w-full py-2 px-3 rounded-lg text-xs font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-lg shadow-amber-500/20 flex items-center justify-center space-x-1.5 transition animate-pulse" data-id="${task.id}">
                     <span>🔑</span>
-                    <span>Confirm Manual Login</span>
+                    <span>Xác nhận đã đăng nhập xong</span>
                 </button>
                 ` : ''}
 
@@ -695,31 +713,31 @@ function renderTasksGrid() {
                     <!-- Stop Button -->
                     <button type="button" class="btn-stop-task py-2 px-3 rounded-lg text-xs font-bold bg-slate-800 hover:bg-rose-950/80 hover:text-rose-300 hover:border-rose-700/60 border border-slate-700 text-slate-200 transition flex items-center justify-center space-x-1" data-id="${task.id}">
                         <span>⏹</span>
-                        <span>Stop</span>
+                        <span>Dừng</span>
                     </button>
                     ` : `
                     <!-- Start Button -->
                     <button type="button" class="btn-start-task py-2 px-3 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-slate-950 transition flex items-center justify-center space-x-1 shadow-md shadow-emerald-600/20" data-id="${task.id}">
                         <span>▶</span>
-                        <span>Start</span>
+                        <span>Bắt đầu</span>
                     </button>
                     `}
 
                     <!-- Live Terminal Logs Button -->
                     <button type="button" class="btn-logs-task py-2 px-3 rounded-lg text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center justify-center space-x-1" data-id="${task.id}">
                         <span>💻</span>
-                        <span>Logs</span>
+                        <span>Nhật ký</span>
                     </button>
                 </div>
 
                 <div class="flex items-center justify-end space-x-2 pt-1 text-xs">
                     <!-- Edit Button -->
-                    <button type="button" class="btn-edit-task text-slate-400 hover:text-white px-2 py-1 rounded hover:bg-slate-800 transition ${isRunning ? 'opacity-50 cursor-not-allowed' : ''}" data-id="${task.id}" ${isRunning ? 'disabled title="Cannot edit running task"' : 'title="Edit task parameters"'}>
-                        ✏️ Edit
+                    <button type="button" class="btn-edit-task text-slate-400 hover:text-white px-2 py-1 rounded hover:bg-slate-800 transition ${isRunning ? 'opacity-50 cursor-not-allowed' : ''}" data-id="${task.id}" ${isRunning ? 'disabled title="Không thể sửa khi task đang chạy"' : 'title="Chỉnh sửa thông số"'}>
+                        ✏️ Sửa
                     </button>
                     <!-- Delete Button -->
-                    <button type="button" class="btn-delete-task text-slate-500 hover:text-rose-400 px-2 py-1 rounded hover:bg-rose-950/40 transition" data-id="${task.id}" title="Delete task permanently">
-                        🗑️ Delete
+                    <button type="button" class="btn-delete-task text-slate-500 hover:text-rose-400 px-2 py-1 rounded hover:bg-rose-950/40 transition" data-id="${task.id}" title="Xóa tác vụ">
+                        🗑️ Xóa
                     </button>
                 </div>
             </div>
@@ -810,9 +828,11 @@ function openCreateModal() {
     const form = document.getElementById('task-form');
     const presetSelector = document.getElementById('preset-selector');
 
-    if (title) title.textContent = 'Create New Sniper Task';
+    if (title) title.textContent = 'Tạo tác vụ mới';
     if (form) form.reset();
     document.getElementById('task-id').value = '';
+    const targetCodesEl = document.getElementById('task-target-course-codes');
+    if (targetCodesEl) targetCodesEl.value = '';
 
     // Default preset
     if (presetSelector) {
@@ -832,7 +852,7 @@ function openEditModal(taskId) {
     const title = document.getElementById('modal-title');
     const presetSelector = document.getElementById('preset-selector');
 
-    if (title) title.textContent = `Edit Task: ${task.name}`;
+    if (title) title.textContent = `Chỉnh sửa tác vụ: ${task.name}`;
 
     // Fill form fields
     document.getElementById('task-id').value = task.id;
@@ -847,7 +867,10 @@ function openEditModal(taskId) {
     document.getElementById('task-username').value = task.credentials?.username || '';
     document.getElementById('task-password').value = task.credentials?.password || '';
 
-    // Selectors
+    // Selectors & Target course codes
+    const targetCodesEl = document.getElementById('task-target-course-codes');
+    if (targetCodesEl) targetCodesEl.value = task.selectors?.target_course_codes || '';
+
     document.getElementById('task-slot-selector').value = task.selectors?.slot_selector || '';
     document.getElementById('task-slot-keyword').value = task.selectors?.slot_keyword || '';
     document.getElementById('task-full-keyword').value = task.selectors?.full_keyword || '';
@@ -880,9 +903,9 @@ function updatePresetDescription(presetId) {
     if (!descEl) return;
 
     if (presetId === 'vau_events') {
-        descEl.textContent = 'Canh và đăng ký vé sự kiện VAUVERSE / NRL VAU siêu tốc với cơ chế kích hoạt kép (Direct API & UI Fallback).';
+        descEl.textContent = 'Canh và đăng ký vé sự kiện VAUVERSE / TechFest VAU siêu tốc với cơ chế kích hoạt kép (Direct API & UI Fallback).';
     } else if (presetId === 'vau_course') {
-        descEl.textContent = 'Canh và đăng ký học phần tín chỉ VAU qua hệ thống đào tạo với quy trình hỗ trợ đăng nhập và tự động tick môn học.';
+        descEl.textContent = 'Hỗ trợ tự động điền tài khoản, dừng chờ nhập Captcha và tự động quét/tick môn học theo mã lớp trên sv.vau.edu.vn.';
     } else {
         descEl.textContent = 'Tùy chỉnh linh hoạt URL, tần số quét và bộ chọn DOM cho bất kỳ trang web mục tiêu nào.';
     }
@@ -895,11 +918,13 @@ function applyPresetToForm(presetId) {
     if (!preset) {
         if (presetId === 'custom') {
             // Keep or clear to blank defaults
-            document.getElementById('task-name').value = 'Custom Sniper Task';
+            document.getElementById('task-name').value = 'Tác vụ Sniper tùy chỉnh';
             document.getElementById('task-polling-interval').value = '3.5';
             document.getElementById('task-jitter').value = '0.5';
-            document.getElementById('task-headless').checked = true;
-            document.getElementById('task-manual-login').checked = false;
+            document.getElementById('task-headless').checked = false;
+            document.getElementById('task-manual-login').checked = true;
+            const targetCodesEl = document.getElementById('task-target-course-codes');
+            if (targetCodesEl) targetCodesEl.value = '';
         }
         return;
     }
@@ -909,11 +934,14 @@ function applyPresetToForm(presetId) {
     document.getElementById('task-target-url').value = preset.target_url;
     document.getElementById('task-polling-interval').value = preset.polling_interval ?? 3.5;
     document.getElementById('task-jitter').value = preset.jitter_sec ?? 0.5;
-    document.getElementById('task-headless').checked = preset.headless ?? true;
-    document.getElementById('task-manual-login').checked = preset.manual_login ?? false;
+    document.getElementById('task-headless').checked = preset.headless ?? false;
+    document.getElementById('task-manual-login').checked = preset.manual_login ?? true;
 
-    // DOM selectors
+    // DOM selectors & Target Courses
     const sel = preset.selectors || {};
+    const targetCodesEl = document.getElementById('task-target-course-codes');
+    if (targetCodesEl) targetCodesEl.value = sel.target_course_codes || '';
+
     document.getElementById('task-slot-selector').value = sel.slot_selector || '';
     document.getElementById('task-slot-keyword').value = sel.slot_keyword || '';
     document.getElementById('task-full-keyword').value = sel.full_keyword || '';
@@ -923,14 +951,14 @@ function applyPresetToForm(presetId) {
 
     // API trigger
     const api = preset.api_trigger || {};
-    document.getElementById('task-enable-dual-trigger').checked = preset.enable_dual_trigger !== false;
+    document.getElementById('task-enable-dual-trigger').checked = preset.enable_dual_trigger === true;
     document.getElementById('task-api-endpoint').value = api.api_endpoint || '';
     document.getElementById('task-api-method').value = api.api_method || 'POST';
 
     const payload = api.api_payload;
     document.getElementById('task-api-payload').value = payload ? JSON.stringify(payload, null, 2) : '';
 
-    Toast.show(`Preset '${preset.name}' loaded into form!`, 'info');
+    Toast.show(`Đã nạp mẫu cấu hình: '${preset.name}'!`, 'info');
 }
 
 async function handleSaveTask() {
@@ -948,6 +976,7 @@ async function handleSaveTask() {
     const username = document.getElementById('task-username').value.trim();
     const password = document.getElementById('task-password').value;
 
+    const targetCourseCodes = document.getElementById('task-target-course-codes')?.value.trim();
     const slotSelector = document.getElementById('task-slot-selector').value.trim();
     const slotKeyword = document.getElementById('task-slot-keyword').value.trim();
     const fullKeyword = document.getElementById('task-full-keyword').value.trim();
@@ -965,7 +994,7 @@ async function handleSaveTask() {
         try {
             apiPayload = JSON.parse(payloadStr);
         } catch (e) {
-            Toast.show('JSON Payload syntax error: please verify JSON format.', 'error', 'INVALID PAYLOAD');
+            Toast.show('Dữ liệu JSON Payload không hợp lệ. Vui lòng kiểm tra lại.', 'error', 'LỖI JSON');
             return;
         }
     }
@@ -983,6 +1012,7 @@ async function handleSaveTask() {
             password: password || undefined
         },
         selectors: {
+            target_course_codes: targetCourseCodes || undefined,
             slot_selector: slotSelector || undefined,
             slot_keyword: slotKeyword || undefined,
             full_keyword: fullKeyword || undefined,
@@ -1001,16 +1031,16 @@ async function handleSaveTask() {
         if (taskId) {
             // Update
             await API.updateTask(taskId, payload);
-            Toast.show(`Task '${name}' updated successfully!`, 'success');
+            Toast.show(`Đã cập nhật tác vụ '${name}'!`, 'success');
         } else {
             // Create
             await API.createTask(payload);
-            Toast.show(`New task '${name}' created!`, 'success');
+            Toast.show(`Đã tạo mới tác vụ '${name}'!`, 'success');
         }
         closeTaskModal();
         await loadTasks();
     } catch (err) {
-        Toast.show(err.message || 'Failed to save task', 'error');
+        Toast.show(err.message || 'Lỗi khi lưu tác vụ', 'error');
     }
 }
 

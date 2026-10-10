@@ -79,7 +79,7 @@
                             AUTO-SNIPER
                         </span>
                         <span class="hidden sm:inline-block ml-2 px-1.5 py-0.5 text-[10px] font-bold tracking-widest uppercase rounded bg-slate-800 text-slate-400 border border-slate-700">
-                            v1.0
+                            v1.1 (VI)
                         </span>
                     </div>
                 </div>
@@ -87,7 +87,7 @@
                 <!-- Backend Connection Pill -->
                 <div id="connection-indicator" class="flex items-center space-x-2 px-2.5 py-1 rounded-full text-xs font-medium bg-slate-800 border border-slate-700 transition-colors">
                     <span id="connection-dot" class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <span id="connection-text" class="text-slate-300">Connected</span>
+                    <span id="connection-text" class="text-slate-300">Đã kết nối</span>
                 </div>
             </div>
 
@@ -95,25 +95,25 @@
             <div class="flex items-center space-x-2 sm:space-x-3">
                 <!-- Audio Alert Toggle & Test Sound -->
                 <div class="flex items-center bg-slate-800/80 p-1 rounded-lg border border-slate-700 text-xs">
-                    <button id="btn-toggle-audio" type="button" class="flex items-center space-x-1.5 px-2.5 py-1 rounded-md transition text-emerald-400 hover:text-emerald-300 hover:bg-slate-700/50" title="Toggle audio alert arpeggio on success">
+                    <button id="btn-toggle-audio" type="button" class="flex items-center space-x-1.5 px-2.5 py-1 rounded-md transition text-emerald-400 hover:text-emerald-300 hover:bg-slate-700/50" title="Bật/Tắt âm thanh chuông báo khi giật slot thành công">
                         <span id="audio-icon">🔊</span>
-                        <span id="audio-label" class="font-semibold hidden sm:inline">Audio: ON</span>
+                        <span id="audio-label" class="font-semibold hidden sm:inline">Chuông: BẬT</span>
                     </button>
-                    <button id="btn-test-sound" type="button" class="ml-1 px-2 py-1 rounded text-slate-400 hover:text-slate-200 hover:bg-slate-700/60 font-medium transition" title="Test Web Audio arpeggio synthesis">
-                        Test Sound
+                    <button id="btn-test-sound" type="button" class="ml-1 px-2 py-1 rounded text-slate-400 hover:text-slate-200 hover:bg-slate-700/60 font-medium transition" title="Nghe thử âm thanh chuông ăn mừng">
+                        Thử chuông
                     </button>
                 </div>
 
                 <!-- Stop All Emergency Button -->
                 <button id="btn-stop-all" type="button" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-rose-950/70 text-rose-300 border border-rose-600/40 hover:bg-rose-900/80 hover:text-rose-100 hover:border-rose-500 shadow-md shadow-rose-950/50 transition">
                     <span>🛑</span>
-                    <span class="hidden md:inline">Stop All</span>
+                    <span class="hidden md:inline">Dừng tất cả</span>
                 </button>
 
                 <!-- Create Task Button -->
                 <button id="btn-create-task" type="button" class="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 shadow-lg shadow-emerald-500/25 transition transform active:scale-95">
                     <span>➕</span>
-                    <span>New Task</span>
+                    <span>Tạo tác vụ mới</span>
                 </button>
             </div>
         </div>
@@ -126,13 +126,13 @@
         <section class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
             <!-- Total -->
             <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3.5 flex flex-col justify-between shadow-sm">
-                <span class="text-xs font-medium text-slate-400">Total Tasks</span>
+                <span class="text-xs font-medium text-slate-400">Tổng tác vụ</span>
                 <span id="stat-total" class="text-2xl font-black text-slate-100 mt-1">0</span>
             </div>
             <!-- Polling -->
             <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3.5 flex flex-col justify-between shadow-sm">
                 <span class="text-xs font-medium text-blue-400 flex items-center justify-between">
-                    <span>Polling</span>
+                    <span>Đang quét (Polling)</span>
                     <span class="h-2 w-2 rounded-full bg-blue-500 animate-pulse"></span>
                 </span>
                 <span id="stat-polling" class="text-2xl font-black text-blue-300 mt-1">0</span>
@@ -140,7 +140,7 @@
             <!-- Waiting Login -->
             <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3.5 flex flex-col justify-between shadow-sm">
                 <span class="text-xs font-medium text-amber-400 flex items-center justify-between">
-                    <span>Wait Login</span>
+                    <span>Chờ đăng nhập / Captcha</span>
                     <span class="h-2 w-2 rounded-full bg-amber-500 animate-pulse"></span>
                 </span>
                 <span id="stat-waiting" class="text-2xl font-black text-amber-300 mt-1">0</span>
@@ -148,7 +148,7 @@
             <!-- Sniping -->
             <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3.5 flex flex-col justify-between shadow-sm">
                 <span class="text-xs font-medium text-purple-400 flex items-center justify-between">
-                    <span>Sniping</span>
+                    <span>Đang giật slot</span>
                     <span class="h-2 w-2 rounded-full bg-purple-500 animate-ping"></span>
                 </span>
                 <span id="stat-sniping" class="text-2xl font-black text-purple-300 mt-1">0</span>
@@ -156,14 +156,14 @@
             <!-- Success -->
             <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3.5 flex flex-col justify-between shadow-sm">
                 <span class="text-xs font-medium text-emerald-400 flex items-center justify-between">
-                    <span>Success</span>
+                    <span>Thành công</span>
                     <span>🎉</span>
                 </span>
                 <span id="stat-success" class="text-2xl font-black text-emerald-300 mt-1">0</span>
             </div>
             <!-- Stopped/Failed -->
             <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3.5 flex flex-col justify-between shadow-sm">
-                <span class="text-xs font-medium text-slate-400">Stopped / Failed</span>
+                <span class="text-xs font-medium text-slate-400">Đã dừng / Lỗi</span>
                 <span id="stat-stopped" class="text-2xl font-black text-slate-300 mt-1">0</span>
             </div>
         </section>
@@ -172,14 +172,14 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
             <div>
                 <h2 class="text-xl font-bold tracking-tight text-white flex items-center space-x-2">
-                    <span>Active Automation Tasks</span>
+                    <span>Danh sách tác vụ tự động</span>
                 </h2>
-                <p class="text-xs text-slate-400">Manage high-speed polling snipers, inspect execution logs, and monitor slot openings in real-time.</p>
+                <p class="text-xs text-slate-400">Quản lý các luồng canh slot tốc độ cao, xem nhật ký thời gian thực và tự động bắt slot khi mở cổng.</p>
             </div>
             <div class="flex items-center space-x-2">
-                <button id="btn-refresh-tasks" type="button" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 border border-slate-700 transition" title="Refresh Tasks from Backend">
+                <button id="btn-refresh-tasks" type="button" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 border border-slate-700 transition" title="Làm mới danh sách tác vụ">
                     <span>🔄</span>
-                    <span>Refresh</span>
+                    <span>Làm mới</span>
                 </button>
             </div>
         </div>
@@ -194,13 +194,13 @@
             <div class="h-16 w-16 mx-auto mb-4 flex items-center justify-center rounded-2xl bg-slate-800/80 border border-slate-700 text-3xl">
                 🎯
             </div>
-            <h3 class="text-lg font-semibold text-slate-200">No sniper tasks configured</h3>
+            <h3 class="text-lg font-semibold text-slate-200">Chưa có tác vụ nào được tạo</h3>
             <p class="text-sm text-slate-400 max-w-sm mx-auto mt-1 mb-6">
-                Create a custom task or load a pre-configured platform preset (VAU Events, VAU Course Registration) to start automated monitoring.
+                Hãy tạo một tác vụ mới hoặc chọn mẫu có sẵn (Cổng VAU, Vé sự kiện) để bắt đầu tự động canh slot nhé.
             </p>
             <button id="btn-empty-create" type="button" class="inline-flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-lg shadow-emerald-500/20 transition">
                 <span>➕</span>
-                <span>Create Your First Task</span>
+                <span>Tạo tác vụ đầu tiên</span>
             </button>
         </div>
     </main>
@@ -221,7 +221,7 @@
             <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-850">
                 <div class="flex items-center space-x-2.5">
                     <span id="modal-icon" class="text-xl">⚙️</span>
-                    <h3 id="modal-title" class="text-lg font-bold text-white">Create Sniper Task</h3>
+                    <h3 id="modal-title" class="text-lg font-bold text-white">Tạo / Chỉnh sửa tác vụ Sniper</h3>
                 </div>
                 <button id="btn-close-task-modal" type="button" class="text-slate-400 hover:text-white text-xl p-1 rounded-lg hover:bg-slate-800 transition">
                     &times;
@@ -236,60 +236,60 @@
                     <!-- Preset Selector -->
                     <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
                         <label for="preset-selector" class="block font-semibold text-slate-200 flex items-center justify-between">
-                            <span>Platform Preset</span>
-                            <span class="text-xs font-normal text-emerald-400">⚡ Auto-fills selectors &amp; API triggers</span>
+                            <span>Mẫu cấu hình có sẵn (Platform Preset)</span>
+                            <span class="text-xs font-normal text-emerald-400">⚡ Tự động điền thông số chuẩn 100%</span>
                         </label>
                         <select id="preset-selector" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none transition">
-                            <option value="custom">Custom Site Rules (Manual Configuration)</option>
-                            <option value="vau_events">VAU Events (VAUVERSE 2026)</option>
-                            <option value="vau_course">VAU Course Registration</option>
+                            <option value="custom">Tùy chỉnh thủ công (Custom Site Rules)</option>
+                            <option value="vau_course">Cổng sinh viên VAU - Đăng ký học phần (sv.vau.edu.vn)</option>
+                            <option value="vau_events">Cổng sự kiện VAU (VAUVERSE 2026)</option>
                         </select>
                         <p id="preset-description" class="text-xs text-slate-400 italic">
-                            Configure arbitrary website URL, detection keywords, and triggers.
+                            Tùy chỉnh linh hoạt URL, tần số quét và bộ chọn DOM cho bất kỳ trang web mục tiêu nào.
                         </p>
                     </div>
 
                     <!-- General Settings -->
                     <div class="space-y-4">
                         <h4 class="font-bold text-slate-300 text-xs uppercase tracking-wider text-emerald-400 border-b border-slate-800 pb-1">
-                            1. Target &amp; Polling Parameters
+                            1. Thông số trang web &amp; Chu kỳ quét
                         </h4>
                         <div>
-                            <label class="block font-medium text-slate-300 mb-1">Task Name *</label>
-                            <input type="text" id="task-name" required placeholder="e.g. VAUVERSE 2026 Ticket Drop" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                            <label class="block font-medium text-slate-300 mb-1">Tên tác vụ (Task Name) *</label>
+                            <input type="text" id="task-name" required placeholder="Ví dụ: Canh môn Giải tích 1 - HK2" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
                         </div>
 
                         <div>
-                            <label class="block font-medium text-slate-300 mb-1">Target Page URL *</label>
-                            <input type="url" id="task-target-url" required placeholder="https://example.com/register" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 font-mono text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                            <label class="block font-medium text-slate-300 mb-1">Đường dẫn trang web (Target Page URL) *</label>
+                            <input type="url" id="task-target-url" required placeholder="https://sv.vau.edu.vn/dang-ky-hoc-phan.html" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 font-mono text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block font-medium text-slate-300 mb-1">Polling Interval (seconds) *</label>
+                                <label class="block font-medium text-slate-300 mb-1">Chu kỳ quét (Polling Interval - giây) *</label>
                                 <input type="number" id="task-polling-interval" step="0.1" min="0.1" max="3600" value="3.5" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                                <span class="text-[11px] text-slate-400">High-speed frequency (3.0 - 5.0s recommended)</span>
+                                <span class="text-[11px] text-slate-400">Tần số kiểm tra trang (khuyến nghị 2.5s - 4.0s)</span>
                             </div>
                             <div>
-                                <label class="block font-medium text-slate-300 mb-1">Jitter (seconds)</label>
+                                <label class="block font-medium text-slate-300 mb-1">Độ trễ ngẫu nhiên (Jitter - giây)</label>
                                 <input type="number" id="task-jitter" step="0.1" min="0.0" max="60" value="0.5" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                                <span class="text-[11px] text-slate-400">Anti-detection random delay variance</span>
+                                <span class="text-[11px] text-slate-400">Chống bị web chặn do quét quá đều</span>
                             </div>
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
                             <label class="flex items-center space-x-2.5 p-3 rounded-lg bg-slate-950 border border-slate-800 cursor-pointer hover:border-slate-700 transition">
-                                <input type="checkbox" id="task-headless" checked class="h-4 w-4 rounded bg-slate-900 border-slate-700 text-emerald-500 focus:ring-emerald-400">
+                                <input type="checkbox" id="task-headless" class="h-4 w-4 rounded bg-slate-900 border-slate-700 text-emerald-500 focus:ring-emerald-400">
                                 <div class="text-xs">
-                                    <span class="font-semibold text-slate-200 block">Headless Mode</span>
-                                    <span class="text-slate-400">Run Chromium silently in background</span>
+                                    <span class="font-semibold text-slate-200 block">Chạy ngầm (Headless Mode)</span>
+                                    <span class="text-slate-400">Ẩn cửa sổ Chrome (bỏ tích nếu cần nhìn thấy web)</span>
                                 </div>
                             </label>
                             <label class="flex items-center space-x-2.5 p-3 rounded-lg bg-slate-950 border border-slate-800 cursor-pointer hover:border-slate-700 transition">
-                                <input type="checkbox" id="task-manual-login" class="h-4 w-4 rounded bg-slate-900 border-slate-700 text-amber-500 focus:ring-amber-400">
+                                <input type="checkbox" id="task-manual-login" checked class="h-4 w-4 rounded bg-slate-900 border-slate-700 text-amber-500 focus:ring-amber-400">
                                 <div class="text-xs">
-                                    <span class="font-semibold text-slate-200 block">Manual Login / Captcha</span>
-                                    <span class="text-slate-400">Pause for human login before polling</span>
+                                    <span class="font-semibold text-slate-200 block">Đăng nhập thủ công / Captcha</span>
+                                    <span class="text-slate-400">Tự mở Chrome cho bạn nhập Captcha trước</span>
                                 </div>
                             </label>
                         </div>
@@ -298,59 +298,72 @@
                     <!-- Credentials Section -->
                     <div class="space-y-4">
                         <h4 class="font-bold text-slate-300 text-xs uppercase tracking-wider text-emerald-400 border-b border-slate-800 pb-1">
-                            2. Authentication &amp; Credentials (Encrypted)
+                            2. Tài khoản &amp; Mật khẩu (Mã hóa Fernet an toàn trên máy bạn)
                         </h4>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block font-medium text-slate-300 mb-1">Username / Student ID</label>
-                                <input type="text" id="task-username" placeholder="Optional student or user ID" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                                <label class="block font-medium text-slate-300 mb-1">Mã sinh viên / Tài khoản</label>
+                                <input type="text" id="task-username" placeholder="Ví dụ: 2531540127" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
                             </div>
                             <div>
-                                <label class="block font-medium text-slate-300 mb-1">Password</label>
+                                <label class="block font-medium text-slate-300 mb-1">Mật khẩu</label>
                                 <div class="relative">
-                                    <input type="password" id="task-password" placeholder="Optional account password" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 pr-9 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                                    <input type="password" id="task-password" placeholder="Mật khẩu tài khoản sinh viên" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 pr-9 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
                                     <button type="button" id="btn-toggle-password" class="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-200 text-xs">
                                         👁
                                     </button>
                                 </div>
-                                <span class="text-[11px] text-slate-400">Encrypted with Fernet locally in data/tasks.enc.json</span>
+                                <span class="text-[11px] text-slate-400">Lưu mã hóa nội bộ trong file data/tasks.enc.json</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- DOM Selectors Section -->
+                    <!-- DOM Selectors & Course Targeting Section -->
                     <div class="space-y-4">
                         <h4 class="font-bold text-slate-300 text-xs uppercase tracking-wider text-emerald-400 border-b border-slate-800 pb-1">
-                            3. Slot Detection &amp; UI Selectors
+                            3. Bộ chọn &amp; Lọc môn học mục tiêu (Target Courses)
                         </h4>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block font-medium text-slate-300 mb-1">Slot Trigger Selector</label>
-                                <input type="text" id="task-slot-selector" placeholder="#btn-register" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 font-mono text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                            </div>
-                            <div>
-                                <label class="block font-medium text-slate-300 mb-1">Slot Available Keyword</label>
-                                <input type="text" id="task-slot-keyword" placeholder="Đăng ký tham gia" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                            </div>
+
+                        <!-- NEW: Target Course Codes input -->
+                        <div class="bg-emerald-950/20 border border-emerald-500/30 p-3.5 rounded-xl space-y-1.5">
+                            <label class="block font-semibold text-emerald-300 flex items-center justify-between">
+                                <span>🎯 Mã học phần / Lớp cần săn (Target Course Codes)</span>
+                                <span class="text-[11px] font-normal text-emerald-400">Tự khóa đúng dòng trong bảng</span>
+                            </label>
+                            <input type="text" id="task-target-course-codes" placeholder="Ví dụ: 25315, MTH101.N01, IT002 (nhiều mã cách nhau bởi dấu phẩy)" class="w-full bg-slate-950 border border-emerald-500/50 rounded-lg px-3 py-2 text-slate-100 font-mono text-xs focus:ring-2 focus:ring-emerald-400 focus:outline-none">
+                            <p class="text-[11px] text-slate-300">
+                                💡 <strong>Giải quyết bài toán danh sách dài:</strong> Bot sẽ tự động quét từng dòng (hàng <code class="text-emerald-400">&lt;tr&gt;</code>) trong bảng, chỉ click đăng ký đúng dòng chứa mã bạn nhập, tuyệt đối không click nhầm môn khác!
+                            </p>
                         </div>
+
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block font-medium text-slate-300 mb-1">Full / Unavailable Keyword</label>
+                                <label class="block font-medium text-slate-300 mb-1">Từ khóa khi CÒN chỗ (Available Keyword)</label>
+                                <input type="text" id="task-slot-keyword" placeholder="Đăng ký" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block font-medium text-slate-300 mb-1">Từ khóa khi HẾT chỗ (Full Keyword)</label>
                                 <input type="text" id="task-full-keyword" placeholder="Hết chỗ" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
                             </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block font-medium text-slate-300 mb-1">UI Confirm Modal Selector</label>
-                                <input type="text" id="task-modal-selector" placeholder="#register-modal" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 font-mono text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                                <label class="block font-medium text-slate-300 mb-1">Bộ chọn ô click môn (UI Slot Selector)</label>
+                                <input type="text" id="task-ui-slot-selector" placeholder="input[type='checkbox']" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 font-mono text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block font-medium text-slate-300 mb-1">Bộ chọn nút Lưu / Xác nhận (UI Submit Selector)</label>
+                                <input type="text" id="task-ui-submit-selector" placeholder="#btnLuu, #btnDangKy" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 font-mono text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
                             </div>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block font-medium text-slate-300 mb-1">UI Slot Click Selector</label>
-                                <input type="text" id="task-ui-slot-selector" placeholder="#btn-register" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 font-mono text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                                <label class="block font-medium text-slate-300 mb-1">Bộ chọn phát hiện có chỗ (Slot Selector)</label>
+                                <input type="text" id="task-slot-selector" placeholder="input[type='checkbox']" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 font-mono text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
                             </div>
                             <div>
-                                <label class="block font-medium text-slate-300 mb-1">UI Submit / Confirm Selector</label>
-                                <input type="text" id="task-ui-submit-selector" placeholder="#btn-confirm-register" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 font-mono text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                                <label class="block font-medium text-slate-300 mb-1">Bộ chọn popup xác nhận (UI Modal Selector)</label>
+                                <input type="text" id="task-modal-selector" placeholder="#modal-confirm" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 font-mono text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
                             </div>
                         </div>
                     </div>
@@ -359,20 +372,20 @@
                     <div class="space-y-4">
                         <div class="flex items-center justify-between border-b border-slate-800 pb-1">
                             <h4 class="font-bold text-slate-300 text-xs uppercase tracking-wider text-emerald-400">
-                                4. Direct API Dual-Trigger (Ultra-Fast)
+                                4. Kích hoạt kép API trực tiếp (Dành cho săn vé sự kiện siêu tốc)
                             </h4>
                             <label class="flex items-center space-x-2 cursor-pointer">
-                                <input type="checkbox" id="task-enable-dual-trigger" checked class="h-4 w-4 rounded bg-slate-900 border-slate-700 text-emerald-500 focus:ring-emerald-400">
-                                <span class="text-xs font-semibold text-emerald-400">Enable Dual-Trigger</span>
+                                <input type="checkbox" id="task-enable-dual-trigger" class="h-4 w-4 rounded bg-slate-900 border-slate-700 text-emerald-500 focus:ring-emerald-400">
+                                <span class="text-xs font-semibold text-emerald-400">Bật Dual-Trigger</span>
                             </label>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div class="sm:col-span-2">
-                                <label class="block font-medium text-slate-300 mb-1">API Endpoint Path or URL</label>
+                                <label class="block font-medium text-slate-300 mb-1">Đường dẫn API (API Endpoint)</label>
                                 <input type="text" id="task-api-endpoint" placeholder="/api/events/.../register" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 font-mono text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
                             </div>
                             <div>
-                                <label class="block font-medium text-slate-300 mb-1">HTTP Method</label>
+                                <label class="block font-medium text-slate-300 mb-1">Phương thức (Method)</label>
                                 <select id="task-api-method" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 font-mono text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
                                     <option value="POST">POST</option>
                                     <option value="GET">GET</option>
@@ -382,9 +395,8 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block font-medium text-slate-300 mb-1">JSON Payload (evaluate fetch)</label>
+                            <label class="block font-medium text-slate-300 mb-1">Dữ liệu gửi kèm (JSON Payload)</label>
                             <textarea id="task-api-payload" rows="3" placeholder='{"sessionIds": ["..."]}' class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-100 font-mono text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none"></textarea>
-                            <span class="text-[11px] text-slate-400">Fired concurrently via page.evaluate() in the active authenticated session</span>
                         </div>
                     </div>
                 </form>
@@ -393,10 +405,10 @@
             <!-- Modal Footer -->
             <div class="px-6 py-4 border-t border-slate-800 flex items-center justify-end space-x-3 bg-slate-850">
                 <button type="button" id="btn-cancel-task" class="px-4 py-2 rounded-lg text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition">
-                    Cancel
+                    Hủy bỏ
                 </button>
                 <button type="button" id="btn-save-task" class="px-5 py-2 rounded-lg text-sm font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-lg shadow-emerald-500/25 transition">
-                    Save Task
+                    Lưu tác vụ
                 </button>
             </div>
         </div>
@@ -471,17 +483,17 @@
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-sm w-full space-y-4 shadow-2xl">
             <div class="flex items-center space-x-3 text-rose-400">
                 <span class="text-2xl">⚠️</span>
-                <h3 class="text-lg font-bold text-white">Delete Sniper Task</h3>
+                <h3 class="text-lg font-bold text-white">Xác nhận xóa tác vụ</h3>
             </div>
             <p class="text-sm text-slate-300">
-                Are you sure you want to delete <span id="delete-task-name" class="font-bold text-white"></span>? This will stop active polling and permanently delete its encrypted configuration.
+                Bạn có chắc chắn muốn xóa tác vụ <span id="delete-task-name" class="font-bold text-white"></span> không? Thao tác này sẽ dừng việc quét và xóa toàn bộ cấu hình đã lưu.
             </p>
             <div class="flex items-center justify-end space-x-3 pt-2">
                 <button type="button" id="btn-cancel-delete" class="px-4 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition">
-                    Cancel
+                    Hủy
                 </button>
                 <button type="button" id="btn-confirm-delete" class="px-4 py-2 rounded-lg text-xs font-bold bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-600/30 transition">
-                    Delete Permanently
+                    Xóa vĩnh viễn
                 </button>
             </div>
         </div>

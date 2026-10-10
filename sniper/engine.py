@@ -226,6 +226,27 @@ class SniperEngine:
             "Visible browser window active. Please log in and solve any Captchas.",
         )
 
+        # Auto-fill credentials if provided so user only has to solve Captcha
+        if task.credentials and (task.credentials.username or task.credentials.password):
+            try:
+                user_sel = task.selectors.username_selector or "#UserName, input[name='UserName'], input[name='username']"
+                pass_sel = task.selectors.password_selector or "#Password, input[name='Password'], input[name='password']"
+                if task.credentials.username:
+                    user_el = page.locator(user_sel).first
+                    if await user_el.count() > 0:
+                        await user_el.fill(task.credentials.username)
+                if task.credentials.password:
+                    pass_el = page.locator(pass_sel).first
+                    if await pass_el.count() > 0:
+                        await pass_el.fill(task.credentials.password)
+                await self._emit_log(
+                    task.id,
+                    "INFO",
+                    "Đã tự động điền Tên đăng nhập và Mật khẩu. Bạn chỉ cần nhập mã Captcha rồi bấm Đăng nhập!",
+                )
+            except Exception as e:
+                logger.debug("Auto-fill exception: %s", e)
+
         login_event = runtime["login_event"]
         stop_event = runtime["stop_event"]
         waiters = [asyncio.create_task(login_event.wait())]
@@ -295,6 +316,29 @@ class SniperEngine:
 
         if detection_type == "DOM_SELECTOR":
             selectors = task.selectors
+
+            # 0. Check specific target course codes row if configured
+            if selectors.target_course_codes:
+                codes = [c.strip() for c in selectors.target_course_codes.split(",") if c.strip()]
+                if codes:
+                    for code in codes:
+                        try:
+                            row = page.locator(f"tr:has-text('{code}')").first
+                            if await row.count() > 0 and await row.is_visible():
+                                row_text = (await row.inner_text()).strip()
+                                # Check if row has full_keyword
+                                if selectors.full_keyword and selectors.full_keyword.lower() in row_text.lower():
+                                    continue
+                                # Check if there is an active checkbox or button in that row
+                                cb = row.locator("input[type='checkbox']:not([disabled]), input[type='radio']:not([disabled]), button:not([disabled])").first
+                                if await cb.count() > 0:
+                                    return True
+                                if selectors.slot_keyword and selectors.slot_keyword.lower() in row_text.lower():
+                                    return True
+                        except Exception:
+                            continue
+                    return False
+
             # 1. Check positive slot selector
             slot_sel = selectors.slot_selector or selectors.ui_slot_selector
             if slot_sel:

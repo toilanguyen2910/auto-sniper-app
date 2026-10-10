@@ -47,6 +47,7 @@ class TaskSelectors(BaseModel):
     slot_selector: Optional[str] = None
     slot_keyword: Optional[str] = None
     full_keyword: Optional[str] = None
+    target_course_codes: Optional[str] = None  # Comma-separated course codes, e.g. "IT001, MATH101"
 
     # Automated UI Trigger sequence
     ui_slot_selector: Optional[str] = None

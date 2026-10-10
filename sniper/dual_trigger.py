@@ -154,9 +154,24 @@ class DualTriggerExecutor:
 
         actions_performed: List[str] = []
         try:
+            # 0. If target_course_codes specified, click checkboxes in matching rows
+            if selectors.target_course_codes:
+                codes = [c.strip() for c in selectors.target_course_codes.split(",") if c.strip()]
+                for code in codes:
+                    try:
+                        row = page.locator(f"tr:has-text('{code}')").first
+                        if await row.count() > 0 and await row.is_visible():
+                            target_btn = row.locator("input[type='checkbox']:not([disabled]), input[type='radio']:not([disabled]), button:not([disabled])").first
+                            if await target_btn.count() > 0:
+                                logger.info("UI trigger clicking course row item: %s", code)
+                                await target_btn.click(timeout=2500)
+                                actions_performed.append(f"clicked_course_row:{code}")
+                    except Exception as e:
+                        logger.debug("Failed clicking course row for %s: %s", code, e)
+
             # 1. Click slot selection / item radio / checkbox if configured
             slot_sel = selectors.ui_slot_selector or selectors.slot_selector
-            if slot_sel:
+            if slot_sel and not actions_performed:
                 logger.info("UI trigger clicking slot selector: %s", slot_sel)
                 await page.click(slot_sel, timeout=2500)
                 actions_performed.append(f"clicked_slot:{slot_sel}")
