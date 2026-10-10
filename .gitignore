@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+
+# Testing & Cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local sensitive data & security keys
+data/*.key
+data/*.enc.json
+!data/.gitkeep
+.env
+*.log
+
+# Playwright
+test-results/
+playwright-report/
